@@ -1,42 +1,30 @@
-// SetUp of db with firebase
+// Sign with email
 "use client";
 import React, { useState } from "react";
-import { db } from "../../service/firebase";
-import { collection, addDoc } from "firebase/firestore";
-// import { auth } from "../../service/firebase";
+import { auth } from "../../service/firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
-async function addDataToFireStore(name: any, email: any, password: any) {
-  try {
-    const docRef = await addDoc(collection(db, "message"), {
-      name: name,
-      email: email,
-      passowrd: password,
-    });
-    console.log("testing of docRef", docRef);
-    console.log("doc write in Id", docRef.id);
-    return true;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-}
-
-const LoginPage = () => {
-  const [name, setName] = useState<any>();
+const SignInPage = () => {
+  // const [name, setName] = useState<any>();
   const [email, setEmail] = useState<any>();
   const [password, setPassword] = useState<any>();
-
-  const handleSubmit = async (e: any) => {
+  //   const auth = getAuth();
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    const added = await addDataToFireStore(name, email, password);
-    if (added) {
-      setName("");
-      setEmail("");
-      setPassword("");
-      alert("Data will be succefully added");
-    } else {
-      alert("No data in db ");
-    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential: any) => {
+        // Signed up
+        const user = userCredential.user;
+        console.log("userCredential : ", userCredential);
+        alert(`Now Successful Login with email ${user}`);
+      })
+      .catch((error: any) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("error :", error);
+
+        // ..
+      });
   };
 
   return (
@@ -51,7 +39,7 @@ const LoginPage = () => {
             height={200}
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Data store in Db of Firebase{" "}
+            Sign in to your account with email
           </h2>
         </div>
 
@@ -62,7 +50,7 @@ const LoginPage = () => {
             method="POST"
             onSubmit={handleSubmit}
           >
-            <div>
+            {/* <div>
               <label
                 htmlFor="name"
                 className="block text-sm font-medium leading-6 text-gray-900"
@@ -80,7 +68,7 @@ const LoginPage = () => {
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div>
               <label
@@ -110,14 +98,6 @@ const LoginPage = () => {
                 >
                   Password
                 </label>
-                <div className="text-sm">
-                  <a
-                    href="#"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
@@ -138,24 +118,14 @@ const LoginPage = () => {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                Create User
               </button>
             </div>
           </form>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{" "}
-            <a
-              href="#"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Start a 14 day free trial
-            </a>
-          </p>
         </div>
       </div>
     </React.Fragment>
   );
 };
 
-export default LoginPage;
+export default SignInPage;

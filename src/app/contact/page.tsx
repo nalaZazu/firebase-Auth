@@ -1,3 +1,4 @@
+// mobile phone Auth verification
 "use client";
 import React, { useState } from "react";
 import { auth } from "../../service/firebase";
@@ -28,16 +29,16 @@ const ContactPage = () => {
       // const recaptchaVerifier =
       const Phone = "+923481425275";
       console.log("number ", number);
-      debugger
+
       // if (providers.length == 0) {
-        const confirmation = await signInWithPhoneNumber(
-          auth,
-          "+923419492200",
-          new RecaptchaVerifier(auth,"recaptcha-container", {})
-          // recaptchaVerifier
-        );
-        console.log(confirmation);
-        console.log("User signed in successfully!");
+      const confirmation = await signInWithPhoneNumber(
+        auth,
+        "+923419492200",
+        new RecaptchaVerifier(auth, "recaptcha-container", {})
+        // recaptchaVerifier
+      );
+      console.log(confirmation);
+      console.log("User signed in successfully!");
       // }
     } catch (err) {
       console.log("err", err);
@@ -56,7 +57,7 @@ const ContactPage = () => {
             height={200}
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+            Phone Auth
           </h2>
         </div>
 
